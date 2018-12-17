@@ -63,6 +63,7 @@ class App extends Component {
 
   setMode = newMode => {
     const temp = newMode === 0 ? true : false;
+    if (temp) this.updateCurrentState();
     this.setState({
       mode: newMode,
       isAutoInfraredSensor: temp,
