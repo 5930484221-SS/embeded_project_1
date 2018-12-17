@@ -20,7 +20,7 @@ class App extends Component {
       isAutoIntensitySensor: true,
 
       // socket.io
-      endpoint: "http://localhost:3001"
+      endpoint: "https://pure-fortress-43600.herokuapp.com"
     };
   }
 
@@ -55,7 +55,9 @@ class App extends Component {
       isAutoIntensitySensor: temp
     });
     axios
-      .post("http://localhost:3001/api/sensor/mode", { mode: newMode })
+      .post("https://pure-fortress-43600.herokuapp.com//api/sensor/mode", {
+        mode: newMode
+      })
       .then(res => {
         console.log(res);
         console.log(res.data);
@@ -67,7 +69,7 @@ class App extends Component {
     this.setState({ isOn: newOn });
     console.log("isOn = " + this.state.isOn);
     axios
-      .post("http://localhost:3001/api/sensor", {
+      .post("https://pure-fortress-43600.herokuapp.com/api/sensor", {
         isOn: newOn,
         infrared,
         light
