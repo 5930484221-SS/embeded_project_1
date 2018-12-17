@@ -26,6 +26,10 @@ class App extends Component {
 
   componentDidMount() {
     this.response();
+    this.updateCurrentState();
+  }
+
+  updateCurrentState = () => {
     axios
       .get("https://pure-fortress-43600.herokuapp.com/api/sensor")
       .then(res => {
@@ -36,7 +40,7 @@ class App extends Component {
           light: sensor.light
         });
       });
-  }
+  };
 
   response = () => {
     const { endpoint } = this.state;
@@ -91,7 +95,11 @@ class App extends Component {
           </div>
           <div className="col-sm-8">
             <LightBulb mode={mode} isOn={isOn} setOn={this.setOn} />
-            <Mode mode={mode} setMode={this.setMode} />
+            <Mode
+              mode={mode}
+              setMode={this.setMode}
+              updateCurrentState={this.updateCurrentState}
+            />
           </div>
         </div>
       </div>

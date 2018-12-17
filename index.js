@@ -54,10 +54,6 @@ const modeCallback = body => {
 
 // APIs
 
-// server.get("/", (req, res) => {
-//   res.send("Hi!");
-// });
-
 // for the front end to get the information to display
 server.get("/api/sensor", (req, res) => {
   res.send(sensor);
