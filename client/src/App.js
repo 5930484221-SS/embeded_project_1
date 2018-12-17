@@ -54,30 +54,19 @@ class App extends Component {
       isAutoInfraredSensor: temp,
       isAutoIntensitySensor: temp
     });
-    axios
-      .post("https://pure-fortress-43600.herokuapp.com//api/sensor/mode", {
-        mode: newMode
-      })
-      .then(res => {
-        console.log(res);
-        console.log(res.data);
-      });
+    axios.post("https://pure-fortress-43600.herokuapp.com/api/sensor/mode", {
+      mode: newMode
+    });
   };
 
   setOn = newOn => {
     const { infrared, light } = this.state;
     this.setState({ isOn: newOn });
-    console.log("isOn = " + this.state.isOn);
-    axios
-      .post("https://pure-fortress-43600.herokuapp.com/api/sensor", {
-        isOn: newOn,
-        infrared,
-        light
-      })
-      .then(res => {
-        console.log(res);
-        console.log(res.data);
-      });
+    axios.post("https://pure-fortress-43600.herokuapp.com/api/sensor", {
+      isOn: newOn,
+      infrared,
+      light
+    });
   };
 
   render() {
