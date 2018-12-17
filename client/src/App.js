@@ -26,6 +26,15 @@ class App extends Component {
 
   componentDidMount() {
     this.response();
+    axios
+      .get("https://pure-fortress-43600.herokuapp.com/api/sensor")
+      .then(res => {
+        this.setState({
+          isOn: res.isOn,
+          infrared: res.infrared,
+          light: res.light
+        });
+      });
   }
 
   response = () => {
