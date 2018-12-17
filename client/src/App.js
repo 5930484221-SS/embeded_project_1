@@ -69,7 +69,9 @@ class App extends Component {
       isAutoIntensitySensor: temp
     });
     axios.post("https://pure-fortress-43600.herokuapp.com/api/sensor/mode", {
-      mode: newMode
+      mode: newMode,
+      isAutoInfraredSensor: temp,
+      isAutoIntensitySensor: temp
     });
   };
 
@@ -95,11 +97,7 @@ class App extends Component {
           </div>
           <div className="col-sm-8">
             <LightBulb mode={mode} isOn={isOn} setOn={this.setOn} />
-            <Mode
-              mode={mode}
-              setMode={this.setMode}
-              updateCurrentState={this.updateCurrentState}
-            />
+            <Mode mode={mode} setMode={this.setMode} />
           </div>
         </div>
       </div>

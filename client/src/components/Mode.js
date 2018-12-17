@@ -1,6 +1,6 @@
 import React from "react";
 
-export default ({ mode, setMode, updateCurrentState }) => (
+export default ({ mode, setMode }) => (
   <div className="text-center mt-3">
     <div className="btn-group">
       <button
@@ -13,7 +13,6 @@ export default ({ mode, setMode, updateCurrentState }) => (
       <button
         onClick={() => {
           setMode(1);
-          updateCurrentState();
         }}
         style={{ width: "10rem" }}
         className="btn btn-dark"
