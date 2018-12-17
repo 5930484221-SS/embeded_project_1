@@ -29,10 +29,11 @@ class App extends Component {
     axios
       .get("https://pure-fortress-43600.herokuapp.com/api/sensor")
       .then(res => {
+        const sensor = res.data;
         this.setState({
-          isOn: res.isOn,
-          infrared: res.infrared,
-          light: res.light
+          isOn: sensor.isOn,
+          infrared: sensor.infrared,
+          light: sensor.light
         });
       });
   }
