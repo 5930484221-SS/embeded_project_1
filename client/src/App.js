@@ -79,7 +79,7 @@ class App extends Component {
 
   setOn = newOn => {
     const { infrared, light } = this.state;
-    this.setState({ isOn: newOn });
+    this.setState({ isOn: newOn, isForceOn: newOn });
     axios.post("https://pure-fortress-43600.herokuapp.com/api/sensor", {
       isOn: newOn,
       isForceOn: newOn,
@@ -89,6 +89,7 @@ class App extends Component {
   };
 
   render() {
+    console.log("isForceOn = " + this.state.isForceOn);
     const { mode, isOn, infrared, light } = this.state;
 
     return (

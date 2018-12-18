@@ -41,6 +41,7 @@ const sensor = {
 
 const statusCallback = body => {
   sensor.isOn = body.isOn;
+  sensor.isForceOn = body.isForceOn;
   sensor.infrared = body.infrared;
   sensor.light = body.light;
 
@@ -49,6 +50,7 @@ const statusCallback = body => {
 
 const modeCallback = body => {
   sensor.mode = body.mode;
+  sensor.isForceOn = body.isForceOn;
   sensor.isAutoInfraredSensor = body.isAutoInfraredSensor;
   sensor.isAutoIntensitySensor = body.isAutoIntensitySensor;
 };
