@@ -32,6 +32,7 @@ server.use(function(req, res, next) {
 const sensor = {
   mode: 0,
   isOn: 0,
+  isForceOn: 0,
   infrared: 0,
   light: 0,
   isAutoInfraredSensor: true,
