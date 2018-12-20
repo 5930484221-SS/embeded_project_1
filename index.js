@@ -88,11 +88,6 @@ io.on("connection", client => {
   client.on("disconnect", () => {
     console.log("user disconnected");
   });
-
-  // send message to every client that connect (realtime)
-  // client.on("sent-message", message => {
-  //   io.sockets.emit("new-message", message);
-  // });
 });
 
 if (process.env.NODE_ENV === "production") {
