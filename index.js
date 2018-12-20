@@ -11,7 +11,7 @@ server.use(
 );
 
 // PORT && connection
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 5000;
 const app = server.listen(PORT, () =>
   console.log(`listenning to port ${PORT}...`)
 );
@@ -30,33 +30,21 @@ server.use(function(req, res, next) {
 
 // Object variables
 const sensor = {
-  mode: 0,
-  isOn: 0,
-  isForceOn: 0,
-  infrared: 0,
-  light: 0,
-  isAutoInfraredSensor: true,
-  isAutoIntensitySensor: true
+  min_bpm: 0,
+  max_bpm: 0,
+  bpm: 0
 };
 
-const statusCallback = body => {
-  sensor.isOn = body.isOn;
-  sensor.infrared = body.infrared;
-  sensor.light = body.light;
+const update = body => {
+  sensor.bpm = body.bpm;
 
   io.sockets.emit("new-state", sensor);
 };
 
-const modeCallback = body => {
-  sensor.mode = body.mode;
-  sensor.isAutoInfraredSensor = body.isAutoInfraredSensor;
-  sensor.isAutoIntensitySensor = body.isAutoIntensitySensor;
+const updateControl = body => {
+  sensor.min_bpm = body.min_bpm;
+  sensor.max_bpm = body.max_bpm;
 };
-
-const forceCallback = body => {
-  sensor.isForceOn = body.isForceOn;
-};
-
 // APIs
 
 // for the front end to get the information to display
@@ -66,18 +54,12 @@ server.get("/api/sensor", (req, res) => {
 
 // for the nodeMCU to update the status of the sensors
 server.post("/api/sensor", (req, res) => {
-  statusCallback(req.body);
+  update(req.body);
   res.send(sensor);
 });
 
-server.post("/api/sensor/force", (req, res) => {
-  forceCallback(req.body);
-  res.send(sensor);
-});
-
-// for the front end to set the mode
-server.post("/api/sensor/mode", (req, res) => {
-  modeCallback(req.body);
+server.post("/api/sensor/control", (req, res) => {
+  updateControl(req.body);
   res.send(sensor);
 });
 

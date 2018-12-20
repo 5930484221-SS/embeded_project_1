@@ -1,109 +1,258 @@
+import "./BPMDisplay.css";
 import React, { Component } from "react";
-import axios from "axios";
+import BPM from "./components/Bpm";
 import socketIOClient from "socket.io-client";
-
-import Header from "./components/Header";
-import LightBulb from "./components/LightBulb";
-import Mode from "./components/Mode";
-import SensorStatus from "./components/SensorStatus";
+import axios from "axios";
 
 class App extends Component {
-  constructor(props) {
-    super(props);
+  state = {
+    bpm: 0,
+    min_heartRate: 60,
+    max_heartRate: 110,
+    gender: "Male",
+    age: "under 26 years old",
 
-    this.state = {
-      mode: 0,
-      isOn: 0,
-      isForceOn: 0,
-      infrared: 0,
-      light: 0,
-      isAutoInfraredSensor: true,
-      isAutoIntensitySensor: true,
-
-      // socket.io
-      endpoint: "https://pure-fortress-43600.herokuapp.com"
-    };
-  }
+    endpoint: "http://localhost:5000" //connect url of realtime server
+  };
 
   componentDidMount() {
     this.response();
-    this.updateCurrentState();
   }
-
-  updateCurrentState = () => {
-    axios
-      .get("https://pure-fortress-43600.herokuapp.com/api/sensor")
-      .then(res => {
-        const sensor = res.data;
-        this.setState({
-          isOn: sensor.isOn,
-          isForceOn: sensor.isOn,
-          infrared: sensor.infrared,
-          light: sensor.light
-        });
-      });
-  };
 
   response = () => {
     const { endpoint } = this.state;
     const socket = socketIOClient(endpoint);
     socket.on("new-state", stateNew => {
-      const { mode } = this.state;
-      if (mode === 0)
-        this.setState({
-          isOn: stateNew.isOn,
-          isForceOn: stateNew.isOn,
-          infrared: stateNew.infrared,
-          light: stateNew.light
-        });
-      else
-        this.setState({
-          infrared: stateNew.infrared,
-          light: stateNew.light
-        });
+      this.setState({ bpm: stateNew.bpm });
+      console.log("socket working fine...");
     });
   };
 
-  setMode = newMode => {
-    const temp = newMode === 0 ? true : false;
-    const { isForceOn } = this.state;
-    if (temp) this.updateCurrentState();
-    this.setState({
-      mode: newMode,
-      isAutoInfraredSensor: temp,
-      isAutoIntensitySensor: temp
+  send = () => {
+    const { min_heartRate, max_heartRate, endpoint } = this.state;
+    axios.post(endpoint + "/api/sensor/control", {
+      min_bpm: min_heartRate,
+      max_bpm: max_heartRate
     });
-    axios.post("https://pure-fortress-43600.herokuapp.com/api/sensor/mode", {
-      mode: newMode,
-      isAutoInfraredSensor: temp,
-      isAutoIntensitySensor: temp
-    });
-    axios.post("https://pure-fortress-43600.herokuapp.com/api/sensor/force", {
-      isForceOn: isForceOn
-    });
+    console.log("sent");
   };
 
-  setOn = newOn => {
-    this.setState({ isOn: newOn, isForceOn: newOn });
-    axios.post("https://pure-fortress-43600.herokuapp.com/api/sensor/force", {
-      isForceOn: newOn
-    });
+  getMin = (gender, age) => {
+    if (age === "under 26 years old") {
+      return gender === "Female" ? 66 : 66;
+    }
+    if (age === "26-35 years old") {
+      return gender === "Female" ? 69 : 66;
+    }
+    if (age === "36-45 years old") {
+      return gender === "Female" ? 70 : 67;
+    }
+    if (age === "46-55 years old") {
+      return gender === "Female" ? 70 : 68;
+    }
+    return gender === "Female" ? 69 : 66;
   };
+
+  getMax = (gender, age) => {
+    if (age === "under 26 years old") {
+      return gender === "Female" ? 91 : 91;
+    }
+    if (age === "26-35 years old") {
+      return gender === "Female" ? 92 : 91;
+    }
+    if (age === "36-45 years old") {
+      return gender === "Female" ? 94 : 92;
+    }
+    if (age === "46-55 years old") {
+      return gender === "Female" ? 93 : 93;
+    }
+    return gender === "Female" ? 94 : 99;
+  };
+
+  renderContent() {
+    if (this.state.bpm > this.state.max_heartRate) {
+      return (
+        <h1 className={`warning`}>
+          <i className="big yellow exclamation triangle icon" />
+          Warning!! your heart rate is above average
+        </h1>
+      );
+    }
+    if (this.state.bpm < this.state.min_heartRate) {
+      return (
+        <h2 className={`warning`}>
+          <i className="big yellow exclamation triangle icon" />
+          Warning!! your heart rate is below average
+        </h2>
+      );
+    }
+    return <BPM value={this.state.bpm} />;
+  }
 
   render() {
-    console.log("isForceOn = " + this.state.isForceOn);
-    const { mode, isOn, infrared, light } = this.state;
+    console.log("bpm :", this.state.bpm);
+    console.log("min: ", this.state.min_heartRate);
+    console.log("max: ", this.state.max_heartRate);
+    console.log("gender: ", this.state.gender);
 
     return (
-      <div className="container">
-        <Header />
-        <div className="row mt-5">
-          <div className="col-sm-4 text-center">
-            <SensorStatus infrared={infrared} light={light} />
-          </div>
-          <div className="col-sm-8">
-            <LightBulb mode={mode} isOn={isOn} setOn={this.setOn} />
-            <Mode mode={mode} setMode={this.setMode} />
+      <div className="ui bpm">
+        <h1 className={`header`}> Heart Rate Monitor</h1>
+        <h3 className={`min-max`}>
+          {" "}
+          Your default mininum,maximum heart rate : {
+            this.state.min_heartRate
+          } , {this.state.max_heartRate} BPM{" "}
+        </h3>
+        <div className="show bpm">{this.renderContent()}</div>
+        <div className="Manual menu">
+          <div>
+            <h4 className={`manual-mode`}> Manual Mode </h4>
+            <h5 className={`select-age`}>Please select your age</h5>
+            <div className={`age-button five ui buttons`}>
+              <button
+                className="ui button"
+                onClick={e => {
+                  this.setState({
+                    age: "under 26 years old",
+                    min_heartRate: this.getMin(
+                      this.state.gender,
+                      this.state.age
+                    ),
+                    max_heartRate: this.getMax(
+                      this.state.gender,
+                      this.state.age
+                    )
+                  });
+                  this.send();
+                }}
+              >
+                {" "}
+                under 26 years old{" "}
+              </button>
+              <button
+                className="ui button"
+                onClick={e => {
+                  this.setState({
+                    age: "26-35 years old",
+                    min_heartRate: this.getMin(
+                      this.state.gender,
+                      this.state.age
+                    ),
+                    max_heartRate: this.getMax(
+                      this.state.gender,
+                      this.state.age
+                    )
+                  });
+                  this.send();
+                }}
+              >
+                {" "}
+                26-35 years old{" "}
+              </button>
+              <button
+                className="ui button"
+                onClick={e => {
+                  this.setState({
+                    age: "36-45 years old",
+                    min_heartRate: this.getMin(
+                      this.state.gender,
+                      this.state.age
+                    ),
+                    max_heartRate: this.getMax(
+                      this.state.gender,
+                      this.state.age
+                    )
+                  });
+                  this.send();
+                }}
+              >
+                {" "}
+                36-45 years old{" "}
+              </button>
+              <button
+                className="ui button"
+                onClick={e => {
+                  this.setState({
+                    age: "46-55 years old",
+                    min_heartRate: this.getMin(
+                      this.state.gender,
+                      this.state.age
+                    ),
+                    max_heartRate: this.getMax(
+                      this.state.gender,
+                      this.state.age
+                    )
+                  });
+                  this.send();
+                }}
+              >
+                {" "}
+                46-55 years old{" "}
+              </button>
+              <button
+                className="ui button"
+                onClick={e => {
+                  this.setState({
+                    age: "above 56 years old",
+                    min_heartRate: this.getMin(
+                      this.state.gender,
+                      this.state.age
+                    ),
+                    max_heartRate: this.getMax(
+                      this.state.gender,
+                      this.state.age
+                    )
+                  });
+                  this.send();
+                }}
+              >
+                {" "}
+                above 56 years old{" "}
+              </button>
+            </div>
+            <h5 className={`select-sex`}>Please select your gender</h5>
+            <div className={`sex-button ui large buttons`}>
+              <button
+                className="ui button"
+                onClick={e => {
+                  this.setState({
+                    gender: "Male",
+                    min_heartRate: this.getMin(
+                      this.state.gender,
+                      this.state.age
+                    ),
+                    max_heartRate: this.getMax(
+                      this.state.gender,
+                      this.state.age
+                    )
+                  });
+                  this.send();
+                }}
+              >
+                Male
+              </button>
+              <div className="or" />
+              <button
+                className="ui button"
+                onClick={e => {
+                  this.setState({
+                    gender: "Female",
+                    min_heartRate: this.getMin(
+                      this.state.gender,
+                      this.state.age
+                    ),
+                    max_heartRate: this.getMax(
+                      this.state.gender,
+                      this.state.age
+                    )
+                  });
+                  this.send();
+                }}
+              >
+                Female
+              </button>
+            </div>
           </div>
         </div>
       </div>
