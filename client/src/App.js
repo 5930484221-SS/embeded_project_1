@@ -37,6 +37,7 @@ class App extends Component {
         const sensor = res.data;
         this.setState({
           isOn: sensor.isOn,
+          isForceOn: sensor.isOn,
           infrared: sensor.infrared,
           light: sensor.light
         });

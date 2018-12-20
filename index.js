@@ -41,7 +41,7 @@ const sensor = {
 
 const statusCallback = body => {
   sensor.isOn = body.isOn;
-  sensor.isForceOn = body.isOn;
+  sensor.isForceOn = body.isForceOn;
   sensor.infrared = body.infrared;
   sensor.light = body.light;
 
@@ -50,7 +50,7 @@ const statusCallback = body => {
 
 const modeCallback = body => {
   sensor.mode = body.mode;
-  sensor.isForceOn = body.isOn;
+  sensor.isForceOn = body.isForceOn;
   sensor.isAutoInfraredSensor = body.isAutoInfraredSensor;
   sensor.isAutoIntensitySensor = body.isAutoIntensitySensor;
 };
@@ -83,9 +83,9 @@ io.on("connection", client => {
   });
 
   // send message to every client that connect (realtime)
-  client.on("sent-message", message => {
-    io.sockets.emit("new-message", message);
-  });
+  // client.on("sent-message", message => {
+  //   io.sockets.emit("new-message", message);
+  // });
 });
 
 if (process.env.NODE_ENV === "production") {
