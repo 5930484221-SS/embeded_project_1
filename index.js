@@ -41,7 +41,6 @@ const sensor = {
 
 const statusCallback = body => {
   sensor.isOn = body.isOn;
-  sensor.isForceOn = body.isForceOn;
   sensor.infrared = body.infrared;
   sensor.light = body.light;
 
@@ -50,9 +49,12 @@ const statusCallback = body => {
 
 const modeCallback = body => {
   sensor.mode = body.mode;
-  sensor.isForceOn = body.isForceOn;
   sensor.isAutoInfraredSensor = body.isAutoInfraredSensor;
   sensor.isAutoIntensitySensor = body.isAutoIntensitySensor;
+};
+
+const forceCallback = body => {
+  sensor.isForceOn = body.isForceOn;
 };
 
 // APIs
@@ -65,6 +67,11 @@ server.get("/api/sensor", (req, res) => {
 // for the nodeMCU to update the status of the sensors
 server.post("/api/sensor", (req, res) => {
   statusCallback(req.body);
+  res.send(sensor);
+});
+
+server.post("/api/sensor/force", (req, res) => {
+  forceCallback(req.body);
   res.send(sensor);
 });
 
