@@ -12,7 +12,7 @@ class App extends Component {
     gender: "Male",
     age: "under 26 years old",
 
-    endpoint: "http://localhost:5000" //connect url of realtime server
+    endpoint: "https://protected-wave-45390.herokuapp.com" //connect url of realtime server
   };
 
   componentDidMount() {
