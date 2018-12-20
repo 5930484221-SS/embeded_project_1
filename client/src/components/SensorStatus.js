@@ -7,7 +7,6 @@ export default ({ light, infrared }) => (
       <div className="container">
         <div className="card-text float-left">Light Sensor: {light}</div>
         <br />
-        <div className="card-text float-left">Infrared Sensor: {infrared}</div>
       </div>
     </div>
   </div>
