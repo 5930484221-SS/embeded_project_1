@@ -52,6 +52,7 @@ class App extends Component {
       if (mode === 0)
         this.setState({
           isOn: stateNew.isOn,
+          isForceOn: stateNew.isOn,
           infrared: stateNew.infrared,
           light: stateNew.light
         });
