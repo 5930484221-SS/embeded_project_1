@@ -65,6 +65,7 @@ class App extends Component {
 
   setMode = newMode => {
     const temp = newMode === 0 ? true : false;
+    const { isForceOn } = this.state;
     if (temp) this.updateCurrentState();
     this.setState({
       mode: newMode,
@@ -75,6 +76,9 @@ class App extends Component {
       mode: newMode,
       isAutoInfraredSensor: temp,
       isAutoIntensitySensor: temp
+    });
+    axios.post("https://pure-fortress-43600.herokuapp.com/api/sensor/force", {
+      isForceOn: isForceOn
     });
   };
 
