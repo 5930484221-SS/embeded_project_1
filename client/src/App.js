@@ -130,11 +130,11 @@ class App extends Component {
                     age: "under 26 years old",
                     min_heartRate: this.getMin(
                       this.state.gender,
-                      this.state.age
+                      "under 26 years old"
                     ),
                     max_heartRate: this.getMax(
                       this.state.gender,
-                      this.state.age
+                      "under 26 years old"
                     )
                   });
                   this.send();
@@ -150,11 +150,11 @@ class App extends Component {
                     age: "26-35 years old",
                     min_heartRate: this.getMin(
                       this.state.gender,
-                      this.state.age
+                      "26-35 years old"
                     ),
                     max_heartRate: this.getMax(
                       this.state.gender,
-                      this.state.age
+                      "26-35 years old"
                     )
                   });
                   this.send();
@@ -170,11 +170,11 @@ class App extends Component {
                     age: "36-45 years old",
                     min_heartRate: this.getMin(
                       this.state.gender,
-                      this.state.age
+                      "36-45 years old"
                     ),
                     max_heartRate: this.getMax(
                       this.state.gender,
-                      this.state.age
+                      "36-45 years old"
                     )
                   });
                   this.send();
@@ -190,11 +190,11 @@ class App extends Component {
                     age: "46-55 years old",
                     min_heartRate: this.getMin(
                       this.state.gender,
-                      this.state.age
+                      "46-55 years old"
                     ),
                     max_heartRate: this.getMax(
                       this.state.gender,
-                      this.state.age
+                      "46-55 years old"
                     )
                   });
                   this.send();
@@ -210,11 +210,11 @@ class App extends Component {
                     age: "above 56 years old",
                     min_heartRate: this.getMin(
                       this.state.gender,
-                      this.state.age
+                      "above 56 years old"
                     ),
                     max_heartRate: this.getMax(
                       this.state.gender,
-                      this.state.age
+                      "above 56 years old"
                     )
                   });
                   this.send();
@@ -231,14 +231,8 @@ class App extends Component {
                 onClick={e => {
                   this.setState({
                     gender: "Male",
-                    min_heartRate: this.getMin(
-                      this.state.gender,
-                      this.state.age
-                    ),
-                    max_heartRate: this.getMax(
-                      this.state.gender,
-                      this.state.age
-                    )
+                    min_heartRate: this.getMin("Male", this.state.age),
+                    max_heartRate: this.getMax("Male", this.state.age)
                   });
                   this.send();
                 }}
@@ -251,14 +245,8 @@ class App extends Component {
                 onClick={e => {
                   this.setState({
                     gender: "Female",
-                    min_heartRate: this.getMin(
-                      this.state.gender,
-                      this.state.age
-                    ),
-                    max_heartRate: this.getMax(
-                      this.state.gender,
-                      this.state.age
-                    )
+                    min_heartRate: this.getMin("Female", this.state.age),
+                    max_heartRate: this.getMax("Female", this.state.age)
                   });
                   this.send();
                 }}
