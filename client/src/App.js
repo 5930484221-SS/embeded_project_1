@@ -30,6 +30,7 @@ class App extends Component {
   };
 
   getCurrentState = () => {
+    const { endpoint } = this.state;
     axios.get(endpoint + "/api/sensor").then(res => {
       const tmp = res.data;
       this.setState({
