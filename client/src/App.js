@@ -34,7 +34,7 @@ class App extends Component {
     axios.get(endpoint + "/api/sensor").then(res => {
       const tmp = res.data;
       this.setState({
-        bmp: tmp.bpm,
+        bpm: tmp.bpm,
         min_heartRate: tmp.min_bpm,
         max_heartRate: tmp.max_bpm
       });
